@@ -19,9 +19,14 @@ flatten([A|L],[A|L1]) :-
 flatten([A|L],R) :-
      flatten(A,A1), flatten(L,L1), append(A1,L1,R).
 
-
 xatom(A) :- atom(A).
 xatom(A) :- number(A).
+
+%*******************************************************************
+% Define a relation reverse(X,Y) such that Y is the reversed list of X
+
+reverse([], []).
+reverse([A|L1], L2) :- reverse(L1, N), append(N, [A], L2).
 
 % Q1 ***************************************************************
 % setDifference(+S1,+S2,-S3): select atoms that exist in S1 but not
@@ -62,3 +67,16 @@ g_compare(A,B,smallest,A) :- A < B.
 g_compare(A,B,smallest,B).
 g_compare(A,B,largest,A)  :- A > B.
 g_compare(A,B,largest,B).
+
+% Q5 - countAll(+L,-N)
+countAll([],A,A).
+countAll(L,N) :-
+    flatten(L,L2), countAll(L2,[],T1), sort(T1,T2), reverse(T2,T3), rswap(T3,N).
+countAll([H|T],A,R) :- map(H,A,A2), countAll(T,A2,R).
+
+map(E,[],[[1,E]]).
+map(H,[[I,H|_]|T],[[R,H]|T]) :- R is I+1.
+map(E,[H|T],[H|R]) :- map(E,T,R).
+
+rswap([],[]).
+rswap([H|T],[R1|R]) :- swap(H,R1), rswap(T,R).
