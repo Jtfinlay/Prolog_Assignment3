@@ -2,6 +2,8 @@
 % CMPUT 325 - LEC B1
 % Assignment # 3
 
+use_module(library(lists)).
+
 %*******************************************************************
 % rmember(+X,+L) : Recursive 'member' call that cycles all levels of
 % a multi-dimensional list.
@@ -80,3 +82,13 @@ map(E,[H|T],[H|R]) :- map(E,T,R).
 
 rswap([],[]).
 rswap([H|T],[R1|R]) :- swap(H,R1), rswap(T,R).
+
+% Q6 - convert(+Term, -Result)
+convert([],_,[]).
+convert(L,R) :- convert(L,false,R).
+convert([e|T],false,R) :- convert(T,false,R).
+convert([q|T],false,[q|R]) :- member(q,T), convert(T,true,R).
+convert([q|T],false,[q|R]) :- convert(T,false,R).
+convert([H|T],false,[c|R]) :- convert(T,false,R).
+convert([q|T],true,[q|R]) :- convert(T,false,R).
+convert([H|T],true,[H|R]) :- convert(T,true,R).
